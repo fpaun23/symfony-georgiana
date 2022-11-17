@@ -1,3 +1,15 @@
 controllers:
     resource: ../src/Controller/
     type: attribute
+
+app_company:
+    path: /company
+    controller: App\Controller\CompanyController::displayCompany
+
+app_contact:
+    path: /contact
+    controller: App\Controller\ContactController::displayContact 
+
+app_home:
+    path: /home
+    controller: App\Controller\HomeController::displayHome
