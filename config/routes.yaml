@@ -6,6 +6,10 @@ app_company:
     path: /company
     controller: App\Controller\CompanyController::displayCompany
 
+app_company_add:
+    path: /company/add
+    controller: App\Controller\CompanyController::addCompany
+
 app_contact:
     path: /contact
     controller: App\Controller\ContactController::displayContact 
