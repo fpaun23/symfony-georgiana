@@ -1,13 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Company{% endblock %}
+{% block title %}Company
+{% endblock %}
 
 {% block body %}
-<style type="text/css">
-        .important { color: #336699; }
-</style>
+	<style type="text/css">
+		.important {
+			color: #336699;
+		}
+	</style>
 
-<div>
-    <p>Welcome to {{ company_name }}!</p>
-</div>
-{% endblock %}
+	<div>
+		<p>Welcome to
+			{{ company_name }}!</p>
+	</div>
+	<div>
+		{% if form is defined and form is not null %}
+			<h1>
+				{{ form(form) }}
+				</h1>
+			{% endif %}
+		</div>
+	{% endblock %}
