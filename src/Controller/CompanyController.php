@@ -24,9 +24,11 @@ class CompanyController extends AbstractController
 
     public function displayCompany(): Response
     {
-        return $this->render('company/index.html.twig', [
+        return $this->render(
+            'company/index.html.twig', [
             'company_name' => $this->companyName,
-        ]);
+            ]
+        );
     }
 
     public function addCompany(Request $request): Response
@@ -53,10 +55,12 @@ class CompanyController extends AbstractController
             return $this->redirectToRoute('app_company');
         }
 
-        return $this->render('company/index.html.twig', [
+        return $this->render(
+            'company/index.html.twig', [
             'form' => $form->createView(),
             'company_name' => $this->companyName,
-        ]);
+            ]
+        );
 
     }
 }
