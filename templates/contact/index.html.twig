@@ -1,13 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Company{% endblock %}
+{% block title %}Company
+{% endblock %}
 
 {% block body %}
-<style type="text/css">
-        .important { color: #336699; }
-</style>
+	<style type="text/css">
+		.important {
+			color: #336699;
+		}
+	</style>
 
-<div>
-    <p>Hello {{ name }}!</p>
-</div>
+	<div>
+		<p>Hello
+			{{ name }}!</p>
+	</div>
+	<div>
+		<form action="{{ path('app_contact_add') }}" method="post">
+			<label for="name">Name</label>
+			<div>
+				<input type="text" name="name" id="name" value="">
+			</div>
+
+			<label for="description">Description</label>
+			<div>
+				<input type="text" name="description" id="description" value="">
+			</div>
+
+			<label for="email">Email</label>
+			<div>
+				<input type="text" name="email" id="email" value="">
+			</div>
+			<input type="submit" value="Save">
+		</form>
+	</div>
+
 {% endblock %}
