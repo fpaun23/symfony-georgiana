@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use App\Constants;
@@ -14,11 +15,29 @@ use App\Constants;
 class ContactController extends AbstractController
 {
     /**
+     * logger
+     *
+     * @var mixed
+     */
+    private $logger;
+
+    /**
      * name
      *
      * @var string
      */
     public $name = 'Georgiana Panaete';
+    
+    /**
+     * __construct
+     *
+     * @param  mixed $logger
+     * @return void
+     */
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
 
     public function displayContact(): Response
     {
@@ -52,6 +71,13 @@ class ContactController extends AbstractController
 
             if (strlen($description) < Constants::RANGE[2] || strlen($description) > Constants::RANGE[3]) {
                 $errors[] = "description";
+            }
+            
+            if (empty($errors)) {
+                $this->logger->notice(
+                    "Submission Successful",
+                    [json_encode(['name' => $name, 'description' => $description, 'email' => $email])]
+                );
             }
         }
             return $this->render(

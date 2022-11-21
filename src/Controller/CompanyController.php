@@ -21,7 +21,7 @@ class CompanyController extends AbstractController
      *
      * @var mixed
      */
-    private $logger;    
+    private $logger;
     /**
      * companyName
      *
