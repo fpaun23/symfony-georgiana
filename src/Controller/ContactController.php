@@ -8,8 +8,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use App\Constants;
 
+/**
+ * ContactController
+ */
 class ContactController extends AbstractController
 {
+    /**
+     * name
+     *
+     * @var string
+     */
     public $name = 'Georgiana Panaete';
 
     public function displayContact(): Response
@@ -20,7 +28,12 @@ class ContactController extends AbstractController
             ]
         );
     }
-
+    
+    /**
+     * addContact
+     *
+     * @return Response
+     */
     public function addContact(): Response
     {
         $errors = [];

@@ -11,17 +11,41 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * CompanyController
+ */
 class CompanyController extends AbstractController
 {
-    private $logger;
+    /**
+     * logger
+     *
+     * @var mixed
+     */
+    private $logger;    
+    /**
+     * companyName
+     *
+     * @var string
+     */
     public $companyName = 'Devnest';
 
-
+    
+    /**
+     * __construct
+     *
+     * @param  mixed $logger
+     * @return void
+     */
     public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
-
+    
+    /**
+     * displayCompany
+     *
+     * @return Response
+     */
     public function displayCompany(): Response
     {
         return $this->render(
@@ -30,7 +54,13 @@ class CompanyController extends AbstractController
             ]
         );
     }
-
+    
+    /**
+     * addCompany
+     *
+     * @param  mixed $request
+     * @return Response
+     */
     public function addCompany(Request $request): Response
     {
         $form = $this->createFormBuilder()
