@@ -7,27 +7,27 @@
 	<style type="text/css">
 		.error {
 			color: white;
-                        background-color: red;
+			background-color: red;
 		}
-                .success {
+		.success {
 			color: white;
-                        background-color: green;
-                }
+			background-color: green;
+		}
 	</style>
 
 	<div>
 		{% if 'name' in errors %}
 			<span class="error">Name must be between 2 and 12 characters</span>
 		{% endif %}
-                <br>
-                {% if 'email' in errors %}
+		<br>
+		{% if 'email' in errors %}
 			<span class="error">Email is not valid</span>
 		{% endif %}
-                <br>
-                {% if 'description' in errors %}
+		<br>
+		{% if 'description' in errors %}
 			<span class="error">Description must be between 10 and 50 characters</span>
 		{% endif %}
-                 {% if errors is empty %}
+		{% if errors is empty %}
 			<span class="success">Your form was successfully submitted!</span>
 		{% endif %}
 	</div>

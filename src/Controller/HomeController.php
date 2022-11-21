@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
  * HomeController
  */
 class HomeController extends AbstractController
-{ 
+{
     /**
      * displayHome
      *

@@ -27,7 +27,7 @@ class ContactController extends AbstractController
      * @var string
      */
     public $name = 'Georgiana Panaete';
-    
+
     /**
      * __construct
      *
@@ -39,15 +39,21 @@ class ContactController extends AbstractController
         $this->logger = $logger;
     }
 
+    /**
+     * displayContact
+     *
+     * @return Response
+     */
     public function displayContact(): Response
     {
         return $this->render(
-            'contact/index.html.twig', [
-            'name' => $this->name,
+            'contact/index.html.twig',
+            [
+                'name' => $this->name,
             ]
         );
     }
-    
+
     /**
      * addContact
      *
@@ -60,7 +66,7 @@ class ContactController extends AbstractController
             $name = $_POST["name"];
             $email = $_POST["email"];
             $description = $_POST["description"];
-        
+
             if ((strlen($name) < Constants::RANGE[0] || strlen($name) > Constants::RANGE[1]) || !preg_match("/^[a-zA-Z]+$/", $name)) {
                 $errors[] = "name";
             }
@@ -72,7 +78,7 @@ class ContactController extends AbstractController
             if (strlen($description) < Constants::RANGE[2] || strlen($description) > Constants::RANGE[3]) {
                 $errors[] = "description";
             }
-            
+
             if (empty($errors)) {
                 $this->logger->notice(
                     "Submission Successful",
@@ -80,10 +86,11 @@ class ContactController extends AbstractController
                 );
             }
         }
-            return $this->render(
-                'contact/add/index.html.twig', [
+        return $this->render(
+            'contact/add/index.html.twig',
+            [
                 'errors' => $errors,
-                ]
-            );
+            ]
+        );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Controller;
 
@@ -29,7 +29,7 @@ class CompanyController extends AbstractController
      */
     public $companyName = 'Devnest';
 
-    
+
     /**
      * __construct
      *
@@ -40,7 +40,7 @@ class CompanyController extends AbstractController
     {
         $this->logger = $logger;
     }
-    
+
     /**
      * displayCompany
      *
@@ -49,12 +49,13 @@ class CompanyController extends AbstractController
     public function displayCompany(): Response
     {
         return $this->render(
-            'company/index.html.twig', [
-            'company_name' => $this->companyName,
+            'company/index.html.twig',
+            [
+                'company_name' => $this->companyName,
             ]
         );
     }
-    
+
     /**
      * addCompany
      *
@@ -86,11 +87,11 @@ class CompanyController extends AbstractController
         }
 
         return $this->render(
-            'company/index.html.twig', [
-            'form' => $form->createView(),
-            'company_name' => $this->companyName,
+            'company/index.html.twig',
+            [
+                'form' => $form->createView(),
+                'company_name' => $this->companyName,
             ]
         );
-
     }
 }
