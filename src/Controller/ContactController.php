@@ -107,9 +107,9 @@ class ContactController extends AbstractController
         $name = $request->request->get('name');
         $email =  $request->request->get('email');
         $description = $request->request->get('description');
-        $isValidated = $this->validator->isValid([$name,$email,$description]); 
+        $isValid = $this->validator->isValid([$name,$email,$description]); 
        
-        if ($isValidated) {
+        if ($isValid) {
             $this->logger->notice(
                 "Submission Successful",
                 [json_encode(['name' => $name, 'description' => $description, 'email' => $email])]

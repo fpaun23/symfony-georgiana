@@ -6,6 +6,12 @@ use App\Constants\Constants;
 
 class DataValidatorContact implements DataValidatorInterface
 {
+    /**
+     * isValid
+     *
+     * @param  mixed $args
+     * @return bool
+     */
     public function isValid(array $args) : bool
     {
         $errors = [];
