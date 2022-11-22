@@ -1,7 +1,7 @@
 <?php
 namespace App\Contact;
 
-use App\DataValidatorInterface;
+use App\Contact\DataValidatorInterface;
 use App\Constants\Constants;
 
 class DataValidatorContact implements DataValidatorInterface

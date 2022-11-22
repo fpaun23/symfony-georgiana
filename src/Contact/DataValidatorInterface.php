@@ -3,5 +3,5 @@ namespace App\Contact;
 
 interface DataValidatorInterface
 {
-    public function validate(array $args) : bool;
+    public function isValid(array $args) : bool;
 }
