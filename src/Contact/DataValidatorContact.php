@@ -2,9 +2,12 @@
 
 namespace App\Contact;
 
-use App\Contact\DataValidatorInterface;
-use App\Constants\Constants;
+use App\Validation\DataValidatorInterface;
+use App\Validation\Constants;
 
+/**
+ * DataValidatorContact
+ */
 class DataValidatorContact implements DataValidatorInterface
 {
     /**
@@ -16,7 +19,9 @@ class DataValidatorContact implements DataValidatorInterface
     public function isValid(array $args): bool
     {
         $errors = [];
-        if ((strlen($args[0]) < Constants::RANGE[0] || strlen($args[0]) > Constants::RANGE[1]) || !preg_match("/^[a-zA-Z]+$/", $args[0])) {
+        if ((strlen($args[0]) < Constants::RANGE[0] || strlen($args[0]) > Constants::RANGE[1]) ||
+            !preg_match("/^[a-zA-Z]+$/", $args[0])
+        ) {
             $errors[] = "name";
         }
 
@@ -33,5 +38,10 @@ class DataValidatorContact implements DataValidatorInterface
         } else {
             return false;
         }
+    }
+
+    public function getError(): string
+    {
+        return Constants::ERROR_MESSAGE;
     }
 }

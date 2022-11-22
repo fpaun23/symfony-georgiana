@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Constants\Constants;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use App\Contact\DataValidatorInterface;
-use App\Contact\DataValidatorContact;
+use App\Validation\DataValidatorInterface;
 
 /**
  * ContactController
@@ -72,7 +70,7 @@ class ContactController extends AbstractController
      * @param  mixed $logger
      * @return void
      */
-    public function __construct(LoggerInterface $logger, DataValidatorContact $validator)
+    public function __construct(LoggerInterface $logger, DataValidatorInterface $validator)
     {
         $this->logger = $logger;
         $this->validator = $validator;
@@ -114,8 +112,10 @@ class ContactController extends AbstractController
                 "Submission Successful",
                 [json_encode(['name' => $name, 'description' => $description, 'email' => $email])]
             );
+            $this->redirectToRoute("app_contact");
         } else {
-            $this->errorMessage = Constants::ERROR_MESSAGE;
+            $this->errorMessage = $this->validator->getError();
+            $this->redirectToRoute("app_contact");
         }
         return $this->displayContact();
     }
