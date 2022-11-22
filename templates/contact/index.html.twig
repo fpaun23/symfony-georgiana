@@ -5,30 +5,31 @@
 
 {% block body %}
 	<style type="text/css">
-		.important {
+		.message {
 			color: #336699;
 		}
 	</style>
 
 	<div>
 		<p>Hello
-			{{ name }}!</p>
+			{{ name_contact }}!</p>
+			<p>{{ error_message }}</p>
 	</div>
 	<div>
 		<form action="{{ path('app_contact_add') }}" method="post">
 			<label for="name">Name</label>
 			<div>
-				<input type="text" name="name" id="name" value="">
+				<input type="text" name="name" id="name" value={{ (error_message) ? '' : name }}>
 			</div>
 
 			<label for="description">Description</label>
 			<div>
-				<input type="text" name="description" id="description" value="">
+				<input type="text" name="description" id="description" value={{ (error_message) ? '' : description }}>
 			</div>
 
 			<label for="email">Email</label>
 			<div>
-				<input type="text" name="email" id="email" value="">
+				<input type="text" name="email" id="email" value={{ (error_message) ? '' : email }}>
 			</div>
 			<input type="submit" value="Save">
 		</form>

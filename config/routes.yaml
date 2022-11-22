@@ -12,11 +12,12 @@ app_company_add:
 
 app_contact:
     path: /contact
-    controller: App\Controller\ContactController::displayContact 
-
+    controller: App\Controller\ContactController::displayContact
+    
 app_contact_add:
     path: /contact/add
     controller: App\Controller\ContactController::addContact
+    methods: POST
 
 app_home:
     path: /home

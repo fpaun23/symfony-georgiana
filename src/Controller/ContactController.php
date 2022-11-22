@@ -7,7 +7,10 @@ namespace App\Controller;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use App\Constants;
+use App\DataValidatorInterface;
+use App\DataValidatorContact;
 
 /**
  * ContactController
@@ -26,7 +29,42 @@ class ContactController extends AbstractController
      *
      * @var string
      */
-    public $name = 'Georgiana Panaete';
+    public $nameContact = 'Georgiana Panaete';
+
+    /**
+     * name
+     *
+     * @var string
+     */
+    public $name = '';
+
+    /**
+     * name
+     *
+     * @var string
+     */
+    public $email = '';
+
+    /**
+     * name
+     *
+     * @var string
+     */
+    public $description = '';
+    
+    /**
+     * message
+     *
+     * @var string
+     */
+    public $errorMessage = '';
+        
+    /**
+     * validator
+     *
+     * @var mixed
+     */
+    public $validator;
 
     /**
      * __construct
@@ -34,9 +72,10 @@ class ContactController extends AbstractController
      * @param  mixed $logger
      * @return void
      */
-    public function __construct(LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger, DataValidatorContact $validator)
     {
         $this->logger = $logger;
+        $this->validator = $validator;
     }
 
     /**
@@ -49,7 +88,11 @@ class ContactController extends AbstractController
         return $this->render(
             'contact/index.html.twig',
             [
+                'name_contact' => $this->nameContact,
+                'error_message' => $this->errorMessage,
                 'name' => $this->name,
+                'email' => $this->email,
+                'description' => $this->description,
             ]
         );
     }
@@ -59,38 +102,22 @@ class ContactController extends AbstractController
      *
      * @return Response
      */
-    public function addContact(): Response
+    public function addContact(Request $request): Response
     {
-        $errors = [];
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $name = $_POST["name"];
-            $email = $_POST["email"];
-            $description = $_POST["description"];
-
-            if ((strlen($name) < Constants::RANGE[0] || strlen($name) > Constants::RANGE[1]) || !preg_match("/^[a-zA-Z]+$/", $name)) {
-                $errors[] = "name";
-            }
-
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errors[] = "email";
-            }
-
-            if (strlen($description) < Constants::RANGE[2] || strlen($description) > Constants::RANGE[3]) {
-                $errors[] = "description";
-            }
-
-            if (empty($errors)) {
-                $this->logger->notice(
-                    "Submission Successful",
-                    [json_encode(['name' => $name, 'description' => $description, 'email' => $email])]
-                );
-            }
+        $name = $request->request->get('name');
+        $email =  $request->request->get('email');
+        $description = $request->request->get('description');
+        $isValidated = $this->validator->validate([$name,$email,$description]); 
+       
+        if ($isValidated) {
+            $this->logger->notice(
+                "Submission Successful",
+                [json_encode(['name' => $name, 'description' => $description, 'email' => $email])]
+            );
+        } else {
+            $this->errorMessage = "Form sumbmission failed!";
         }
-        return $this->render(
-            'contact/add/index.html.twig',
-            [
-                'errors' => $errors,
-            ]
-        );
+
+        return $this->displayContact();
     }
 }
