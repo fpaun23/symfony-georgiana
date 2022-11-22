@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Constants\Constants;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use App\Constants;
-use App\DataValidatorInterface;
-use App\DataValidatorContact;
+use App\Contact\DataValidatorInterface;
+use App\Contact\DataValidatorContact;
 
 /**
  * ContactController
@@ -115,9 +115,8 @@ class ContactController extends AbstractController
                 [json_encode(['name' => $name, 'description' => $description, 'email' => $email])]
             );
         } else {
-            $this->errorMessage = "Form sumbmission failed!";
+            $this->errorMessage = Constants::ERROR_MESSAGE;
         }
-
         return $this->displayContact();
     }
 }

@@ -1,11 +1,12 @@
 <?php
-namespace App;
+namespace App\Contact;
 
 use App\DataValidatorInterface;
+use App\Constants\Constants;
 
 class DataValidatorContact implements DataValidatorInterface
 {
-    public function validate(array $args) : bool
+    public function isValid(array $args) : bool
     {
         $errors = [];
         if ((strlen($args[0]) < Constants::RANGE[0] || strlen($args[0]) > Constants::RANGE[1]) || !preg_match("/^[a-zA-Z]+$/", $args[0])) {
