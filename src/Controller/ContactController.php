@@ -51,14 +51,14 @@ class ContactController extends AbstractController
      * @var string
      */
     public $description = '';
-    
+
     /**
      * message
      *
      * @var string
      */
     public $errorMessage = '';
-        
+
     /**
      * validator
      *
@@ -107,8 +107,8 @@ class ContactController extends AbstractController
         $name = $request->request->get('name');
         $email =  $request->request->get('email');
         $description = $request->request->get('description');
-        $isValid = $this->validator->isValid([$name,$email,$description]); 
-       
+        $isValid = $this->validator->isValid([$name, $email, $description]);
+
         if ($isValid) {
             $this->logger->notice(
                 "Submission Successful",

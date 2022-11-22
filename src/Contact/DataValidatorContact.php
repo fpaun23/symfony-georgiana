@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Contact;
 
 use App\Contact\DataValidatorInterface;
@@ -12,7 +13,7 @@ class DataValidatorContact implements DataValidatorInterface
      * @param  mixed $args
      * @return bool
      */
-    public function isValid(array $args) : bool
+    public function isValid(array $args): bool
     {
         $errors = [];
         if ((strlen($args[0]) < Constants::RANGE[0] || strlen($args[0]) > Constants::RANGE[1]) || !preg_match("/^[a-zA-Z]+$/", $args[0])) {
