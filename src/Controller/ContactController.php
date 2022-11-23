@@ -21,9 +21,9 @@ class ContactController extends AbstractController
      * @var mixed
      */
     private $logger;
-
+    
     /**
-     * name
+     * nameContact
      *
      * @var string
      */
@@ -36,22 +36,24 @@ class ContactController extends AbstractController
      */
     public $name = '';
 
+       
     /**
-     * name
+     * email
      *
      * @var string
      */
     public $email = '';
-
+       
     /**
-     * name
+     * description
      *
      * @var string
      */
     public $description = '';
 
+        
     /**
-     * message
+     * errorMessage
      *
      * @var string
      */
@@ -68,6 +70,7 @@ class ContactController extends AbstractController
      * __construct
      *
      * @param  mixed $logger
+     * @param  mixed $validator
      * @return void
      */
     public function __construct(LoggerInterface $logger, DataValidatorInterface $validator)
