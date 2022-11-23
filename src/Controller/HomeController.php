@@ -7,8 +7,16 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * HomeController
+ */
 class HomeController extends AbstractController
 {
+    /**
+     * displayHome
+     *
+     * @return Response
+     */
     public function displayHome(): Response
     {
         $contact = 'Contact';

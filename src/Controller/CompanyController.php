@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Controller;
 
@@ -11,26 +11,57 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * CompanyController
+ */
 class CompanyController extends AbstractController
 {
+    /**
+     * logger
+     *
+     * @var mixed
+     */
     private $logger;
+    /**
+     * companyName
+     *
+     * @var string
+     */
     public $companyName = 'Devnest';
 
 
+    /**
+     * __construct
+     *
+     * @param  mixed $logger
+     * @return void
+     */
     public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
 
+    /**
+     * displayCompany
+     *
+     * @return Response
+     */
     public function displayCompany(): Response
     {
         return $this->render(
-            'company/index.html.twig', [
-            'company_name' => $this->companyName,
+            'company/index.html.twig',
+            [
+                'company_name' => $this->companyName,
             ]
         );
     }
 
+    /**
+     * addCompany
+     *
+     * @param  mixed $request
+     * @return Response
+     */
     public function addCompany(Request $request): Response
     {
         $form = $this->createFormBuilder()
@@ -56,11 +87,11 @@ class CompanyController extends AbstractController
         }
 
         return $this->render(
-            'company/index.html.twig', [
-            'form' => $form->createView(),
-            'company_name' => $this->companyName,
+            'company/index.html.twig',
+            [
+                'form' => $form->createView(),
+                'company_name' => $this->companyName,
             ]
         );
-
     }
 }
