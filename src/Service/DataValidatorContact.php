@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Contact;
+namespace App\Service;
 
-use App\Validation\DataValidatorInterface;
+use App\Service\DataValidatorInterface;
 use App\Validation\Constants;
 
 /**

@@ -8,7 +8,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use App\Validation\DataValidatorInterface;
+use App\Service\DataValidatorInterface;
 
 /**
  * ContactController
