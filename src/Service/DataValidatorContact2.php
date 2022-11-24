@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Contact;
+namespace App\Service;
 
-use App\Validation\DataValidatorInterface;
+use App\Service\DataValidatorInterface;
 use App\Validation\Constants;
 
 /**
  * DataValidatorContact
  */
-class DataValidatorContact implements DataValidatorInterface
+class DataValidatorContact2 implements DataValidatorInterface
 {
     /**
      * isValid
@@ -34,9 +34,9 @@ class DataValidatorContact implements DataValidatorInterface
         }
 
         if (empty($errors)) {
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
     }
 
