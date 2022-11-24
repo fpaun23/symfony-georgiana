@@ -21,7 +21,7 @@ class ContactController extends AbstractController
      * @var mixed
      */
     private $logger;
-    
+
     /**
      * nameContact
      *
@@ -36,14 +36,14 @@ class ContactController extends AbstractController
      */
     public $name = '';
 
-       
+
     /**
      * email
      *
      * @var string
      */
     public $email = '';
-       
+
     /**
      * description
      *
@@ -51,7 +51,7 @@ class ContactController extends AbstractController
      */
     public $description = '';
 
-        
+
     /**
      * errorMessage
      *
