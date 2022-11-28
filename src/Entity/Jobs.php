@@ -2,36 +2,52 @@
 
 namespace App\Entity;
 
-use App\Repository\JobsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: JobsRepository::class)]
+/**
+ * Jobs
+ *
+ * @ORM\Table(name="jobs")
+ * @ORM\Entity
+ */
 class Jobs
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
-    #[ORM\Column(length: 255)]
-    private ?string $jobs = null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     */
+    private $name;
 
-    #[ORM\Column(length: 255)]
-    private ?string $description = null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=255, nullable=false)
+     */
+    private $description;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getJobs(): ?string
+    public function getName(): ?string
     {
-        return $this->jobs;
+        return $this->name;
     }
 
-    public function setJobs(string $jobs): self
+    public function setName(string $name): self
     {
-        $this->jobs = $jobs;
+        $this->name = $name;
 
         return $this;
     }
@@ -47,4 +63,6 @@ class Jobs
 
         return $this;
     }
+
+
 }

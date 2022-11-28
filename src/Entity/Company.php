@@ -2,19 +2,31 @@
 
 namespace App\Entity;
 
-use App\Repository\CompanyRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: CompanyRepository::class)]
+/**
+ * Company
+ *
+ * @ORM\Table(name="company")
+ * @ORM\Entity
+ */
 class Company
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     */
+    private $name;
 
     public function getId(): ?int
     {
@@ -32,4 +44,6 @@ class Company
 
         return $this;
     }
+
+
 }
