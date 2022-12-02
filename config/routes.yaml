@@ -9,3 +9,8 @@ app_company:
 app_company_add:
     path: /company/add
     controller: App\Controller\CompanyController::addCompany
+
+app_company_list:
+    path: /company/list
+    controller: App\Controller\CompanyController::list
+    methods: GET

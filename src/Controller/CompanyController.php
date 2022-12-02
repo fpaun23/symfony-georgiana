@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Company;
 use Psr\Log\LoggerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * CompanyController
@@ -29,6 +31,12 @@ class CompanyController extends AbstractController
      */
     public $companyName = 'Devnest';
 
+    /**
+     * @var ManagerRegistry
+     */
+    private ManagerRegistry $doctrine;
+
+    private mixed $repository;
 
     /**
      * __construct
@@ -36,9 +44,11 @@ class CompanyController extends AbstractController
      * @param  mixed $logger
      * @return void
      */
-    public function __construct(LoggerInterface $logger)
+    public function __construct(ManagerRegistry $doctrine, LoggerInterface $logger)
     {
+        $this->doctrine = $doctrine;
         $this->logger = $logger;
+        $this->repository = $this->doctrine->getRepository(Company::class);
     }
 
     /**
@@ -66,7 +76,6 @@ class CompanyController extends AbstractController
     {
         $form = $this->createFormBuilder()
             ->add('name', TextType::class)
-            ->add('description', TextType::class)
             ->add('save', SubmitType::class, ['label' => 'Add'])
             ->getForm();
 
@@ -76,14 +85,24 @@ class CompanyController extends AbstractController
 
             $data = $form->getData();
             $name = $data['name'];
-            $description = $data['description'];
+            $entityManager = $this->doctrine->getManager();
+            $company = new Company();
+            $company->setName($name);
+            $entityManager->persist($company);
+            $entityManager->flush();
 
-            $this->logger->notice(
-                "Submission Successful",
-                [json_encode(['name' => $name, 'description' => $description])]
-            );
+            // $this->logger->notice(
+            //     "Submission Successful",
+            //     [json_encode(['name' => $name])]
+            // );
 
-            return $this->redirectToRoute('app_company');
+            // return $this->redirectToRoute('app_company');
+
+            return new Response(sprintf(
+                'Id %d and name %s',
+                $company->getId(),
+                $company->getName()
+            ));
         }
 
         return $this->render(
@@ -93,5 +112,11 @@ class CompanyController extends AbstractController
                 'company_name' => $this->companyName,
             ]
         );
+    }
+
+    public function list(): Response
+    {
+        $companies = $this->repository->findAll();
+        return $this->json($companies);
     }
 }
