@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Company;
-use Psr\Log\LoggerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\CompanyRepository;
 
 /**
  * CompanyController
@@ -41,32 +39,21 @@ class CompanyController extends AbstractController
     private mixed $repository;
 
     /**
+     * @var CompanyRepository
+     */
+    private CompanyRepository $companyRepository;
+
+    /**
      * __construct
      *
      * @param  mixed $logger
      * @return void
      */
-    public function __construct(ManagerRegistry $doctrine, LoggerInterface $logger)
+    public function __construct(CompanyRepository $companyRepository)
     {
-        $this->doctrine = $doctrine;
-        $this->logger = $logger;
-        $this->repository = $this->doctrine->getRepository(Company::class);
+        $this->companyRepository = $companyRepository;
     }
 
-    /**
-     * displayCompany
-     *
-     * @return Response
-     */
-    public function displayCompany(): Response
-    {
-        return $this->render(
-            'company/index.html.twig',
-            [
-                'company_name' => $this->companyName,
-            ]
-        );
-    }
 
     /**
      * addCompany
@@ -76,37 +63,22 @@ class CompanyController extends AbstractController
      */
     public function addCompany(Request $request): Response
     {
-        $form = $this->createFormBuilder()
-            ->add('name', TextType::class)
-            ->add('save', SubmitType::class, ['label' => 'Add'])
-            ->getForm();
+        //get all request parameters : $request->query->all()
 
-        $form->handleRequest($request);
+        //get request parameter with key 'name
+        $name = $request->get('name');
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        //create new Company objec
+        $newCompany = new Company();
+        $newCompany->setName($name);
 
-            $data = $form->getData();
-            $name = $data['name'];
-            $entityManager = $this->doctrine->getManager();
-            $company = new Company();
-            $company->setName($name);
-            $entityManager->persist($company);
-            $entityManager->flush();
+        //call the Repository save function with flush set to true
+        $this->companyRepository->save($newCompany, true);
 
-            return new Response(
-                sprintf(
-                    'Id %d and name %s',
-                    $company->getId(),
-                    $company->getName()
-                )
-            );
-        }
-
-        return $this->render(
-            'company/index.html.twig',
+        return new JsonResponse(
             [
-                'form' => $form->createView(),
-                'company_name' => $this->companyName,
+             'saved' => true,
+             'name' => $name
             ]
         );
     }
@@ -118,21 +90,14 @@ class CompanyController extends AbstractController
      * @param  mixed $id
      * @return Response
      */
-    public function updateCompany(int $id): Response
+    public function updateCompany(Request $request, int $id): Response
     {
-        $updateId = null;
-        $entityManager = $this->doctrine->getManager();
-        $company = $entityManager->getRepository(Company::class)->find($id);
+        $requestParams = $request->query->all();
+        $updateResult = $this->companyRepository->update($id, $requestParams);
 
-        if (!empty($company)) {
-            $updateId = $company->getId();
-            $company->setName('Georgiana12');
-            $entityManager->flush();
-        }
         return new JsonResponse(
             [
-            'update' => !empty($updateId),
-            'updateId' => $updateId
+                'rows_updated' => $updateResult
             ]
         );
     }

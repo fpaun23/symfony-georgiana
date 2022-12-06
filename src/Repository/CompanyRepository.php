@@ -39,6 +39,32 @@ class CompanyRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * do an update on the company table
+     *
+     * @param  mixed $id the id of the company record from the database to be updated
+     * @param  mixed $params a list of params with the fields and values to update
+     * @return int
+     */
+    public function update(int $id, array $params): int
+    {
+        //create a new query builder object
+        $queryBuilder = $this->createQueryBuilder('c');
+
+        //prepare an update statement
+        $nbUpdatedRows = $queryBuilder->update()
+            ->set('c.name', ':companyName')
+            ->where('c.id = :companyId')
+            ->setParameter('companyName', $params['name'])
+            ->setParameter('companyId', $id)
+            ->getQuery()
+            ->execute();
+            //->execute() will return the number of affected rows by the sql query (in this case updated rows)
+            //the result is 0 if no updates and >= 1 if updates done
+
+            return $nbUpdatedRows;
+    }
+
 //    /**
 //     * @return Company[] Returns an array of Company objects
 //     */
