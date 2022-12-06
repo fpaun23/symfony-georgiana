@@ -20,23 +20,27 @@ class CompanyRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Company::class);
     }
-
-    public function save(Company $entity, bool $flush = false): void
+    
+    /**
+     * save a new company
+     *
+     * @param  mixed $entity an object of thpe EntityCompany
+     * @return bool
+     */
+    public function save(Company $entity): bool
     {
         $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()->flush();
 
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+        //if previous flush method is succesfull the $entity->getId() will return the id of the inserted company
+        //if previous flush method is not succesfull $entity->getId() will return NULL
+        return $entity->getId() > 0; // if null willreturn false
     }
 
-    public function remove(Company $entity, bool $flush = false): void
+    public function remove(Company $entity): void
     {
         $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+        $this->getEntityManager()->flush();
     }
 
     /**
