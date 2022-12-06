@@ -31,7 +31,6 @@ app_company_companyId:
     controller: App\Controller\CompanyController::companyId
     methods: GET
 
-
 app_company_companyName:
     path: /company/name/{name}
     controller: App\Controller\CompanyController::companyName
