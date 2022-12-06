@@ -9,8 +9,38 @@ app_company:
 app_company_add:
     path: /company/add
     controller: App\Controller\CompanyController::addCompany
+    methods: POST
 
 app_company_list:
     path: /company/list
-    controller: App\Controller\CompanyController::list
+    controller: App\Controller\CompanyController::listCompany
     methods: GET
+
+ass_company_update:
+    path: /company/update/{id}
+    controller: App\Controller\CompanyController::updateCompany
+    methods: PUT
+
+app_company_delete:
+    path: /company/delete/{id}
+    controller: App\Controller\CompanyController::deleteCompany
+    methods: DELETE
+
+app_company_companyId:
+    path: /company/{id}
+    controller: App\Controller\CompanyController::companyId
+    methods: GET
+
+
+app_company_companyName:
+    path: /company/name/{name}
+    controller: App\Controller\CompanyController::companyName
+    methods: GET
+
+app_company_like_companyName:
+    path: /company/like/{name}
+    controller: App\Controller\CompanyController::likeCompanyName
+    methods: GET
+
+
+    

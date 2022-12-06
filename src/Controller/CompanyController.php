@@ -9,6 +9,7 @@ use Psr\Log\LoggerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,6 +25,7 @@ class CompanyController extends AbstractController
      * @var mixed
      */
     private $logger;
+
     /**
      * companyName
      *
@@ -91,18 +93,13 @@ class CompanyController extends AbstractController
             $entityManager->persist($company);
             $entityManager->flush();
 
-            // $this->logger->notice(
-            //     "Submission Successful",
-            //     [json_encode(['name' => $name])]
-            // );
-
-            // return $this->redirectToRoute('app_company');
-
-            return new Response(sprintf(
-                'Id %d and name %s',
-                $company->getId(),
-                $company->getName()
-            ));
+            return new Response(
+                sprintf(
+                    'Id %d and name %s',
+                    $company->getId(),
+                    $company->getName()
+                )
+            );
         }
 
         return $this->render(
@@ -114,9 +111,134 @@ class CompanyController extends AbstractController
         );
     }
 
-    public function list(): Response
+    /**
+     * updateCompany
+     *
+     * @param  mixed $doctrine
+     * @param  mixed $id
+     * @return Response
+     */
+    public function updateCompany(int $id): Response
     {
-        $companies = $this->repository->findAll();
-        return $this->json($companies);
+        $updateId = null;
+        $entityManager = $this->doctrine->getManager();
+        $company = $entityManager->getRepository(Company::class)->find($id);
+
+        if (!empty($company)) {
+            $updateId = $company->getId();
+            $company->setName('Georgiana12');
+            $entityManager->flush();
+        }
+        return new JsonResponse(
+            [
+            'update' => !empty($updateId),
+            'updateId' => $updateId
+            ]
+        );
+    }
+
+    /**
+     * deleteCompany
+     *
+     * @param  mixed $doctrine
+     * @param  mixed $id
+     * @return Response
+     */
+    public function deleteCompany(int $id): Response
+    {
+        $deletedId = null;
+        $entityManager = $this->doctrine->getManager();
+        $company = $entityManager->getRepository(Company::class)->find($id);
+
+        if (!empty($company)) {
+            $deletedId = $company->getId();
+            $entityManager->remove($company);
+            $entityManager->flush();
+        }
+
+        return new JsonResponse(
+            [
+            'detleted' => !empty($deletedId),
+            'deleteId' => $deletedId
+            ]
+        );
+    }
+
+    /**
+     * listCompany
+     *
+     * @return Response
+     */
+    public function listCompany(): Response
+    {
+        $entityManager = $this->doctrine->getManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('c')
+            ->from(Company::class, 'c')
+            ->getQuery();
+
+        $sql = $query->getArrayResult();
+        return new JsonResponse($sql);
+    }
+    
+    /**
+     * companyId
+     *
+     * @param  mixed $id
+     * @return Response
+     */
+    public function companyId(int $id): Response
+    {
+        $entityManager = $this->doctrine->getManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('c.name')
+            ->from(Company::class, 'c')
+            ->where('c.id = :identifier')
+            ->setParameter('identifier', $id)
+            ->getQuery();
+        $sql = $query->getResult();
+        return new JsonResponse($sql);
+    }
+    
+    /**
+     * companyName
+     *
+     * @param  mixed $name
+     * @return Response
+     */
+    public function companyName(string $name): Response
+    {
+        $entityManager = $this->doctrine->getManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('c.id, c.name')
+            ->from(Company::class, 'c')
+            ->where('c.name = :identifier')
+            ->setParameter('identifier', $name)
+            ->getQuery();
+        $sql = $query->getResult();
+        return new JsonResponse($sql);
+    }
+        
+    /**
+     * likeCompanyName
+     *
+     * @param  mixed $name
+     * @return Response
+     */
+    public function likeCompanyName(string $name): Response
+    {
+        $entityManager = $this->doctrine->getManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('c.id, c.name')
+            ->from(Company::class, 'c')
+            ->where('c.name LIKE :identifier')
+            ->setParameter('identifier', '%' . $name . '%')
+            ->getQuery();
+        $sql = $query->getResult();
+        return new JsonResponse($sql);
     }
 }
