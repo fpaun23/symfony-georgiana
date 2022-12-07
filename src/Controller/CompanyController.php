@@ -158,6 +158,7 @@ class CompanyController extends AbstractController
     public function companyName(string $name): Response
     {
         $result = $this->companyRepository->getCompanyName($name);
+
         return new JsonResponse($result);
     }
 
@@ -171,6 +172,7 @@ class CompanyController extends AbstractController
     public function likeCompanyName(string $name): Response
     {
         $result = $this->companyRepository->getLikeCompanyName($name);
+
         return new JsonResponse($result);
     }
 

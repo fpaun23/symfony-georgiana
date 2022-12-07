@@ -145,6 +145,7 @@ class CompanyRepository extends ServiceEntityRepository
             ->setParameter('identifier', '%' . $name . '%')
             ->getQuery()
             ->getResult();
+            
         return $query;
     }
 
