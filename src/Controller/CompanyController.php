@@ -4,56 +4,29 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Psr\Log\LoggerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use App\Entity\Company;
+use App\Repository\CompanyRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * CompanyController
  */
 class CompanyController extends AbstractController
 {
-    /**
-     * logger
-     *
-     * @var mixed
-     */
-    private $logger;
-    /**
-     * companyName
-     *
-     * @var string
-     */
-    public $companyName = 'Devnest';
-
+    private CompanyRepository $companyRepository;
 
     /**
      * __construct
      *
-     * @param  mixed $logger
+     * @param  mixed $companyRepository
      * @return void
      */
-    public function __construct(LoggerInterface $logger)
+    public function __construct(CompanyRepository $companyRepository)
     {
-        $this->logger = $logger;
-    }
-
-    /**
-     * displayCompany
-     *
-     * @return Response
-     */
-    public function displayCompany(): Response
-    {
-        return $this->render(
-            'company/index.html.twig',
-            [
-                'company_name' => $this->companyName,
-            ]
-        );
+        $this->companyRepository = $companyRepository;
     }
 
     /**
@@ -64,34 +37,145 @@ class CompanyController extends AbstractController
      */
     public function addCompany(Request $request): Response
     {
-        $form = $this->createFormBuilder()
-            ->add('name', TextType::class)
-            ->add('description', TextType::class)
-            ->add('save', SubmitType::class, ['label' => 'Add'])
-            ->getForm();
+        //get all request parameters : $request->query->all()
 
-        $form->handleRequest($request);
+        //get request parameter with key 'name
+        $name = $request->get('name');
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        //create new Company objec
+        $newCompany = new Company();
+        $newCompany->setName($name);
 
-            $data = $form->getData();
-            $name = $data['name'];
-            $description = $data['description'];
+        //call the Repository save function with flush set to true
+        $companySaved = $this->companyRepository->save($newCompany);
 
-            $this->logger->notice(
-                "Submission Successful",
-                [json_encode(['name' => $name, 'description' => $description])]
-            );
-
-            return $this->redirectToRoute('app_company');
-        }
-
-        return $this->render(
-            'company/index.html.twig',
+        return new JsonResponse(
             [
-                'form' => $form->createView(),
-                'company_name' => $this->companyName,
+                'saved' => $companySaved,
             ]
         );
     }
+
+    /**
+     * updateCompany
+     *
+     * @param  mixed $request
+     * @param  mixed $id
+     * @return Response
+     */
+    public function updateCompany(Request $request, int $id): Response
+    {
+        $requestParams = $request->query->all();
+        $updateResult = $this->companyRepository->update($id, $requestParams);
+
+        return new JsonResponse(
+            [
+                'rows_updated' => $updateResult
+            ]
+        );
+    }
+
+    /**
+     * deleteCompany
+     *
+     * @param  mixed $id
+     * @return Response
+     */
+    public function deleteCompany(int $id): Response
+    {
+        $companies = $this->companyRepository->findAll();
+        foreach ($companies as $company) {
+            if ($company->getId() === $id) {
+                $this->companyRepository->remove($company);
+                return new JsonResponse(
+                    [
+                        'row_deleted' => $id
+                    ]
+                );
+            } else {
+                return new JsonResponse(
+                    [
+                        'rows_deleted' => 0
+                    ]
+                );
+            }
+        }
+    }
+
+    /**
+     * listCompany
+     *
+     * @return Response
+     */
+    public function listCompany(): Response
+    {
+        $result = $this->companyRepository->getAllCompanies();
+
+        return new JsonResponse(
+            [
+                'rows' => $result
+            ]
+        );
+    }
+
+    /**
+     * companyId
+     *
+     * @param  mixed $id
+     * @return Response
+     */
+    public function companyId(int $id): Response
+    {
+        $result = $this->companyRepository->getCompanyId($id);
+
+        return new JsonResponse(
+            [
+                'rows' => $result
+            ]
+        );
+    }
+
+    /**
+     * companyName
+     *
+     * @param  mixed $name
+     * @return Response
+     */
+    public function companyName(string $name): Response
+    {
+        $result = $this->companyRepository->getCompanyName($name);
+
+        return new JsonResponse($result);
+    }
+
+
+    /**
+     * likeCompanyName
+     *
+     * @param  mixed $name
+     * @return Response
+     */
+    public function likeCompanyName(string $name): Response
+    {
+        $result = $this->companyRepository->getLikeCompanyName($name);
+
+        return new JsonResponse($result);
+    }
+
+    // /**
+    //  * likeCompanyName
+    //  *
+    //  * @param  mixed $name
+    //  * @return Response
+    //  */
+    // public function likeCompanyName(string $name): Response
+    // {
+    //     $likeCompanyName = $this->companyRepository->findOneBy(['name' => $name]);
+    //     $result = $this->companyRepository->getLikeCompanyName($likeCompanyName);
+    //     return new JsonResponse(
+    //         [
+    //             'rows' => $result
+    //         ]
+    //     );
+    // }
 }
