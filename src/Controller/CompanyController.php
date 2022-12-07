@@ -6,7 +6,6 @@ namespace App\Controller;
 
 use App\Entity\Company;
 use App\Repository\CompanyRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,22 +23,16 @@ class CompanyController extends AbstractController
      */
     public $companyName = 'Devnest';
 
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
     private CompanyRepository $companyRepository;
 
     /**
      * __construct
      *
-     * @param  mixed $logger
+     * @param  mixed $companyRepository
      * @return void
      */
-    public function __construct(ManagerRegistry $doctrine, CompanyRepository $companyRepository)
+    public function __construct(CompanyRepository $companyRepository)
     {
-        $this->doctrine = $doctrine;
         $this->companyRepository = $companyRepository;
     }
 
@@ -88,7 +81,7 @@ class CompanyController extends AbstractController
     /**
      * updateCompany
      *
-     * @param  mixed $doctrine
+     * @param  mixed $request
      * @param  mixed $id
      * @return Response
      */
@@ -107,7 +100,6 @@ class CompanyController extends AbstractController
     /**
      * deleteCompany
      *
-     * @param  mixed $doctrine
      * @param  mixed $id
      * @return Response
      */
@@ -123,6 +115,7 @@ class CompanyController extends AbstractController
         );
     }
 
+
     /**
      * listCompany
      *
@@ -130,15 +123,13 @@ class CompanyController extends AbstractController
      */
     public function listCompany(): Response
     {
-        $entityManager = $this->doctrine->getManager();
-        $queryBuilder = $entityManager->createQueryBuilder();
-        $query = $queryBuilder
-            ->select('c')
-            ->from(Company::class, 'c')
-            ->getQuery()
-            ->getArrayResult();
+        $result = $this->companyRepository->getAllCompanies();
 
-        return new JsonResponse($query);
+        return new JsonResponse(
+            [
+                'rows' => $result
+            ]
+        );
     }
 
     /**
@@ -149,17 +140,13 @@ class CompanyController extends AbstractController
      */
     public function companyId(int $id): Response
     {
-        $entityManager = $this->doctrine->getManager();
-        $queryBuilder = $entityManager->createQueryBuilder();
-        $query = $queryBuilder
-            ->select('c.name')
-            ->from(Company::class, 'c')
-            ->where('c.id = :identifier')
-            ->setParameter('identifier', $id)
-            ->getQuery()
-            ->getResult();
+        $result = $this->companyRepository->getCompanyId($id);
 
-        return new JsonResponse($query);
+        return new JsonResponse(
+            [
+                'rows' => $result
+            ]
+        );
     }
 
     /**
@@ -170,18 +157,10 @@ class CompanyController extends AbstractController
      */
     public function companyName(string $name): Response
     {
-        $entityManager = $this->doctrine->getManager();
-        $queryBuilder = $entityManager->createQueryBuilder();
-        $query = $queryBuilder
-            ->select('c.id, c.name')
-            ->from(Company::class, 'c')
-            ->where('c.name = :identifier')
-            ->setParameter('identifier', $name)
-            ->getQuery()
-            ->getResult();
-
-        return new JsonResponse($query);
+        $result = $this->companyRepository->getCompanyName($name);
+        return new JsonResponse($result);
     }
+
 
     /**
      * likeCompanyName
@@ -191,15 +170,24 @@ class CompanyController extends AbstractController
      */
     public function likeCompanyName(string $name): Response
     {
-        $entityManager = $this->doctrine->getManager();
-        $queryBuilder = $entityManager->createQueryBuilder();
-        $query = $queryBuilder
-            ->select('c.id, c.name')
-            ->from(Company::class, 'c')
-            ->where('c.name LIKE :identifier')
-            ->setParameter('identifier', '%' . $name . '%')
-            ->getQuery()
-            ->getResult();
-        return new JsonResponse($query);
+        $result = $this->companyRepository->getLikeCompanyName($name);
+        return new JsonResponse($result);
     }
+
+    // /**
+    //  * likeCompanyName
+    //  *
+    //  * @param  mixed $name
+    //  * @return Response
+    //  */
+    // public function likeCompanyName(string $name): Response
+    // {
+    //     $likeCompanyName = $this->companyRepository->findOneBy(['name' => $name]);
+    //     $result = $this->companyRepository->getLikeCompanyName($likeCompanyName);
+    //     return new JsonResponse(
+    //         [
+    //             'rows' => $result
+    //         ]
+    //     );
+    // }
 }
