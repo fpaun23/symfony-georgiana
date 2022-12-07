@@ -16,13 +16,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class CompanyController extends AbstractController
 {
-    /**
-     * companyName
-     *
-     * @var string
-     */
-    public $companyName = 'Devnest';
-
     private CompanyRepository $companyRepository;
 
     /**
@@ -34,21 +27,6 @@ class CompanyController extends AbstractController
     public function __construct(CompanyRepository $companyRepository)
     {
         $this->companyRepository = $companyRepository;
-    }
-
-    /**
-     * displayCompany
-     *
-     * @return Response
-     */
-    public function displayCompany(): Response
-    {
-        return $this->render(
-            'company/index.html.twig',
-            [
-                'company_name' => $this->companyName,
-            ]
-        );
     }
 
     /**
@@ -105,16 +83,24 @@ class CompanyController extends AbstractController
      */
     public function deleteCompany(int $id): Response
     {
-        $companyToDelete = $this->companyRepository->find($id);
-        $companyDeleted = $this->companyRepository->remove($companyToDelete);
-
-        return new JsonResponse(
-            [
-                'rows_deleted' => $companyDeleted
-            ]
-        );
+        $companies = $this->companyRepository->findAll();
+        foreach ($companies as $company) {
+            if ($company->getId() === $id) {
+                $this->companyRepository->remove($company);
+                return new JsonResponse(
+                    [
+                        'row_deleted' => $id
+                    ]
+                );
+            } else {
+                return new JsonResponse(
+                    [
+                        'rows_deleted' => 0
+                    ]
+                );
+            }
+        }
     }
-
 
     /**
      * listCompany

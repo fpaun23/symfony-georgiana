@@ -85,11 +85,11 @@ class CompanyRepository extends ServiceEntityRepository
     {
         $queryBuilder = $this->createQueryBuilder('c');
 
-        $query = $queryBuilder
+        $company = $queryBuilder
             ->getQuery()
             ->getArrayResult();
 
-        return $query;
+        return $company;
     }
 
     /**
@@ -101,14 +101,14 @@ class CompanyRepository extends ServiceEntityRepository
     public function getCompanyId(int $id): array
     {
         $queryBuilder = $this->createQueryBuilder('c');
-        $query = $queryBuilder
+        $company = $queryBuilder
             ->select('c.id, c.name')
             ->where('c.id = :identifier')
             ->setParameter('identifier', $id)
             ->getQuery()
             ->getResult();
 
-        return $query;
+        return $company;
     }
 
     /**
@@ -120,14 +120,14 @@ class CompanyRepository extends ServiceEntityRepository
     public function getCompanyName(string $name): array
     {
         $queryBuilder = $this->createQueryBuilder('c');
-        $query = $queryBuilder
+        $company = $queryBuilder
             ->select('c.id, c.name')
             ->where('c.name = :searchTerm')
             ->setParameter('searchTerm', $name)
             ->getQuery()
             ->getResult();
 
-        return $query;
+        return $company;
     }
 
     /**
@@ -139,14 +139,14 @@ class CompanyRepository extends ServiceEntityRepository
     public function getLikeCompanyName(string $name): array
     {
         $queryBuilder = $this->createQueryBuilder('c');
-        $query = $queryBuilder
+        $company = $queryBuilder
             ->select('c.id, c.name')
             ->where('c.name LIKE :identifier')
             ->setParameter('identifier', '%' . $name . '%')
             ->getQuery()
             ->getResult();
             
-        return $query;
+        return $company;
     }
 
     //    /**
