@@ -52,7 +52,7 @@ class CompanyValidator
      */
     public function idValidator(int $id): bool
     {
-        if ($id > 0) {
+        if ($id < 0) {
             throw new \InvalidArgumentException('Company id length cannot be less than 0');
         }
 

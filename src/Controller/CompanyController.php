@@ -241,7 +241,6 @@ class CompanyController extends AbstractController
         }
     }
 
-
     /**
      * likeCompanyName
      *
