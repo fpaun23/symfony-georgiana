@@ -28,7 +28,7 @@ class CompanyValidator
         return true;
     }
 
-        
+
     /**
      * nameValidator
      *
@@ -43,22 +43,7 @@ class CompanyValidator
 
         return true;
     }
-    
-    /**
-     * idValidatorArray
-     *
-     * @param  mixed $data
-     * @return bool
-     */
-    public function idValidatorArray(array $data): bool
-    {
-        if (strlen($data['id']) < 0) {
-            throw new \InvalidArgumentException('Company id length cannot be less than 0');
-        }
 
-        return true;
-    }
-        
     /**
      * idValidator
      *
@@ -67,7 +52,7 @@ class CompanyValidator
      */
     public function idValidator(int $id): bool
     {
-        if (empty($id)) {
+        if ($id > 0) {
             throw new \InvalidArgumentException('Company id length cannot be less than 0');
         }
 

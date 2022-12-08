@@ -187,7 +187,7 @@ class CompanyController extends AbstractController
             $this->companyValidator->idValidator($id);
 
             $result = $this->companyRepository->getCompanyId($id);
-            
+
             return new JsonResponse(
                 [
                     'results' => [
@@ -220,7 +220,7 @@ class CompanyController extends AbstractController
             $this->companyValidator->nameValidator($name);
 
             $result = $this->companyRepository->getCompanyName($name);
-            
+
             return new JsonResponse(
                 [
                     'results' => [
@@ -254,7 +254,7 @@ class CompanyController extends AbstractController
             $this->companyValidator->nameValidator($name);
 
             $result = $this->companyRepository->getlikeCompanyName($name);
-            
+
             return new JsonResponse(
                 [
                     'results' => [
