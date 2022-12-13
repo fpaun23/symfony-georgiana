@@ -98,6 +98,10 @@ class JobsController extends AbstractController
         try {
             $job = $this->jobsRepository->find($id);
 
+            if (null === $job) {
+                throw new \InvalidArgumentException('Could not find company with id: ' . $id);
+            }
+
             return new JsonResponse(
                 [
                     'results' => [
@@ -108,7 +112,7 @@ class JobsController extends AbstractController
                             'active' => $job->getActive(),
                             'description' => $job->getDescription(),
                             'company' => [
-                                $job->getCompany()->getId(),
+                                'id' => $job->getCompany()->getId(),
                                 'name' => $job->getCompany()->getName()
                             ]
                         ],
@@ -199,35 +203,36 @@ class JobsController extends AbstractController
      */
     public function deleteJob(int $id): Response
     {
-        $jobs = $this->jobsRepository->findAll();
-        foreach ($jobs as $job) {
-            if (($job->getId() === $id) && isset($id)) {
-                try {
-                    $this->jobsRepository->remove($job);
-                    return new JsonResponse(
-                        [
-                            'results' => [
-                                'deleted' => $id,
-                                'error' => false,
-                            ]
-                        ]
-                    );
-                } catch (Exception $e) {
-                    return new JsonResponse(
-                        [
-                            'results' => [
-                                'error' => true,
-                                'message' => $e->getMessage()
-                            ]
-                        ]
-                    );
-                }
-            }
+        $job = $this->jobsRepository->find($id);
+
+        if (is_null($job)) {
+            throw new \InvalidArgumentException('Could not find job with id: ' . $id);
+        }
+
+        try {
+            $this->jobsRepository->remove($job);
+            return new JsonResponse(
+                [
+                    'results' => [
+                        'deleted' => $id,
+                        'error' => false,
+                    ]
+                ]
+            );
+        } catch (Exception $e) {
+            return new JsonResponse(
+                [
+                    'results' => [
+                        'error' => true,
+                        'message' => $e->getMessage()
+                    ]
+                ]
+            );
         }
     }
-    
+
     /**
-     * jobName
+     * getjobName
      *
      * @param  mixed $name
      * @return Response
@@ -258,6 +263,12 @@ class JobsController extends AbstractController
     }
 
 
+    /**
+     * getLikeJobName
+     *
+     * @param  mixed $name
+     * @return Response
+     */
     public function getLikeJobName(string $name): Response
     {
         try {
@@ -266,7 +277,7 @@ class JobsController extends AbstractController
             return new JsonResponse(
                 [
                     'results' => [
-                        'companies' => $result,
+                        'job' => $result,
                         'error' => false,
                     ]
                 ]
