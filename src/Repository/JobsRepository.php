@@ -78,7 +78,44 @@ class JobsRepository extends ServiceEntityRepository
 
         return $nbUpdatedRows;
     }
+    
+    /**
+     * getJobName
+     *
+     * @param  mixed $name
+     * @return array
+     */
+    public function getJobName(string $name): array
+    {
+        $queryBuilder = $this->createQueryBuilder('j');
+        $company = $queryBuilder
+            ->select('j.id, j.name')
+            ->where('j.name = :searchTerm')
+            ->setParameter('searchTerm', $name)
+            ->getQuery()
+            ->getResult();
 
+        return $company;
+    }
+
+    /**
+     * getLikeJobName
+     *
+     * @param  mixed $name
+     * @return array
+     */
+    public function getLikeJobName(string $name): array
+    {
+        $queryBuilder = $this->createQueryBuilder('j');
+        $company = $queryBuilder
+            ->select('j.id, j.name')
+            ->where('j.name LIKE :identifier')
+            ->setParameter('identifier', '%' . $name . '%')
+            ->getQuery()
+            ->getResult();
+            
+        return $company;
+    }
 
     //    /**
     //     * @return Jobs[] Returns an array of Jobs objects

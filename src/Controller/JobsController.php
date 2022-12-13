@@ -225,4 +225,61 @@ class JobsController extends AbstractController
             }
         }
     }
+    
+    /**
+     * jobName
+     *
+     * @param  mixed $name
+     * @return Response
+     */
+    public function getjobName(string $name): Response
+    {
+        try {
+            $result = $this->jobsRepository->getJobName($name);
+
+            return new JsonResponse(
+                [
+                    'results' => [
+                        'jobs' => $result,
+                        'error' => false,
+                    ]
+                ]
+            );
+        } catch (Exception $e) {
+            return new JsonResponse(
+                [
+                    'results' => [
+                        'error' => true,
+                        'message' => $e->getMessage()
+                    ]
+                ]
+            );
+        }
+    }
+
+
+    public function getLikeJobName(string $name): Response
+    {
+        try {
+            $result = $this->jobsRepository->getLikeJobName($name);
+
+            return new JsonResponse(
+                [
+                    'results' => [
+                        'companies' => $result,
+                        'error' => false,
+                    ]
+                ]
+            );
+        } catch (Exception $e) {
+            return new JsonResponse(
+                [
+                    'results' => [
+                        'error' => true,
+                        'message' => $e->getMessage()
+                    ]
+                ]
+            );
+        }
+    }
 }

@@ -61,3 +61,13 @@ app_jobs_delete:
     path: /jobs/delete/{id}
     controller: App\Controller\JobsController::deleteJob
     methods: DELETE
+
+app_jobs_jobName:
+    path: /jobs/name/{name}
+    controller: App\Controller\JobsController::getjobName
+    methods: GET
+
+app_jobs_like_jobName:
+    path: /jobs/like/{name}
+    controller: App\Controller\JobsController::getLikeJobName
+    methods: GET
