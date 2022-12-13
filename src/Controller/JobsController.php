@@ -21,7 +21,7 @@ class JobsController extends AbstractController
 {
     private JobsRepository $jobsRepository;
     private CompanyRepository $companyRepository;
-        
+
     /**
      * __construct
      *
@@ -64,7 +64,7 @@ class JobsController extends AbstractController
             $job->setPriority($priority);
             $job->setCreatedAt(new DateTime());
             $job->setCompany($company);
-            
+
             $savedJob = $this->jobsRepository->save($job);
 
             return new JsonResponse(
@@ -86,7 +86,7 @@ class JobsController extends AbstractController
             );
         }
     }
-    
+
     /**
      * getJobById
      *
@@ -129,7 +129,7 @@ class JobsController extends AbstractController
             );
         }
     }
-        
+
     /**
      * updateJobs
      *
@@ -163,7 +163,7 @@ class JobsController extends AbstractController
             );
         }
     }
-    
+
     /**
      * getJobList
      *
@@ -190,7 +190,7 @@ class JobsController extends AbstractController
             ]
         );
     }
-    
+
     /**
      * deleteJob
      *
