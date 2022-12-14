@@ -20,7 +20,7 @@ class JobsRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Jobs::class);
     }
-
+    
     /**
      * save
      *
@@ -36,7 +36,7 @@ class JobsRepository extends ServiceEntityRepository
         //if previous flush method is not succesfull $entity->getId() will return NULL
         return $entity->getId() > 0; // if null willreturn false
     }
-
+    
     /**
      * remove
      *
@@ -48,12 +48,12 @@ class JobsRepository extends ServiceEntityRepository
         $this->getEntityManager()->remove($entity);
         $this->getEntityManager()->flush();
     }
-
+       
     /**
-     * do an update on the company table
+     * update
      *
-     * @param  mixed $id     the id of the company record from the database to be updated
-     * @param  mixed $params a list of params with the fields and values to update
+     * @param  mixed $id
+     * @param  mixed $params
      * @return int
      */
     public function update(int $id, array $params): int

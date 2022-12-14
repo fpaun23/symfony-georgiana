@@ -21,7 +21,7 @@ class JobsController extends AbstractController
 {
     private JobsRepository $jobsRepository;
     private CompanyRepository $companyRepository;
-
+    
     /**
      * __construct
      *
@@ -34,9 +34,9 @@ class JobsController extends AbstractController
         $this->jobsRepository = $jobsRepository;
         $this->companyRepository = $companyRepository;
     }
-
+        
     /**
-     * addjobs
+     * addJob
      *
      * @param  mixed $request
      * @return Response
