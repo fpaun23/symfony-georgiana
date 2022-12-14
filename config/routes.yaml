@@ -37,10 +37,10 @@ app_company_like_companyName:
     controller: App\Controller\CompanyController::likeCompanyName
     methods: GET
 
-app_jobs_id:
-    path: /jobs/{id}
-    controller: App\Controller\JobsController::getJobById
-    methods: GET
+# app_jobs_id:
+#     path: /jobs/{id}
+#     controller: App\Controller\JobsController::getJobById
+#     methods: GET
 
 app_jobs_add:
     path: /jobs/add
@@ -64,7 +64,7 @@ app_jobs_delete:
 
 app_jobs_jobName:
     path: /jobs/name/{name}
-    controller: App\Controller\JobsController::getjobName
+    controller: App\Controller\JobsController::getJobByName
     methods: GET
 
 app_jobs_like_jobName:

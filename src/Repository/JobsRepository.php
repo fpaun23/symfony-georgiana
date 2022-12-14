@@ -20,7 +20,7 @@ class JobsRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Jobs::class);
     }
-    
+
     /**
      * save
      *
@@ -36,7 +36,7 @@ class JobsRepository extends ServiceEntityRepository
         //if previous flush method is not succesfull $entity->getId() will return NULL
         return $entity->getId() > 0; // if null willreturn false
     }
-    
+
     /**
      * remove
      *
@@ -48,7 +48,7 @@ class JobsRepository extends ServiceEntityRepository
         $this->getEntityManager()->remove($entity);
         $this->getEntityManager()->flush();
     }
-       
+
     /**
      * update
      *
@@ -62,34 +62,44 @@ class JobsRepository extends ServiceEntityRepository
         $queryBuilder = $this->createQueryBuilder('j');
 
         //prepare an update statement
-        $nbUpdatedRows = $queryBuilder->update()
-            ->set('j.name', ':jobName')
-            ->set('j.description', ':jobDescription')
-            ->set('j.active', ':jobActive')
-            ->set('j.priority', ':jobPriority')
+        $queryBuilder->update()
             ->where('j.id = :jobId')
-            ->setParameter('jobName', $params['name'])
-            ->setParameter('jobDescription', $params['description'])
-            ->setParameter('jobActive', $params['active'])
-            ->setParameter('jobPriority', $params['priority'])
-            ->setParameter('jobId', $id)
-            ->getQuery()
-            ->execute();
+            ->setParameter('jobId', $id);
+        if (!empty($params['name'])) {
+            $queryBuilder->set('j.name', ':jobName');
+            $queryBuilder->setParameter('jobName', $params['name']);
+        }
+
+        if (!empty($params['description'])) {
+            $queryBuilder->set('j.description', ':jobDescription');
+            $queryBuilder->setParameter('jobDescription', $params['description']);
+        }
+
+        if (!empty($params['active'])) {
+            $queryBuilder->set('j.active', ':jobActive');
+            $queryBuilder->setParameter('jobActive', $params['active']);
+        }
+
+        if (!empty($params['priority'])) {
+            $queryBuilder->set('j.priority', ':jobPriority');
+            $queryBuilder->setParameter('jobPriority', $params['priority']);
+        }
+
+        $nbUpdatedRows = $queryBuilder->getQuery()->execute();
 
         return $nbUpdatedRows;
     }
-    
+
     /**
-     * getJobName
+     * getJobByName
      *
      * @param  mixed $name
      * @return array
      */
-    public function getJobName(string $name): array
+    public function getJobByName(string $name): array
     {
         $queryBuilder = $this->createQueryBuilder('j');
         $company = $queryBuilder
-            ->select('j.id, j.name')
             ->where('j.name = :searchTerm')
             ->setParameter('searchTerm', $name)
             ->getQuery()
@@ -108,12 +118,11 @@ class JobsRepository extends ServiceEntityRepository
     {
         $queryBuilder = $this->createQueryBuilder('j');
         $company = $queryBuilder
-            ->select('j.id, j.name')
             ->where('j.name LIKE :identifier')
             ->setParameter('identifier', '%' . $name . '%')
             ->getQuery()
             ->getResult();
-            
+
         return $company;
     }
 

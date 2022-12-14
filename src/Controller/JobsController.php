@@ -53,7 +53,7 @@ class JobsController extends AbstractController
             $company =  $this->companyRepository->find($companyId);
 
             if (is_null($company)) {
-                throw new \InvalidArgumentException('Could not find company with id: ' . $companyId);
+                throw new \InvalidArgumentException('Could not find job with id: ' . $companyId);
             }
 
             //create new Jobs objec
@@ -99,7 +99,7 @@ class JobsController extends AbstractController
             $job = $this->jobsRepository->find($id);
 
             if (null === $job) {
-                throw new \InvalidArgumentException('Could not find company with id: ' . $id);
+                throw new \InvalidArgumentException('Could not find job with id: ' . $id);
             }
 
             return new JsonResponse(
@@ -180,16 +180,26 @@ class JobsController extends AbstractController
         $name = [];
 
         foreach ($jobs as $job) {
-            $name[] = $job->getName();
+            $name[] = [
+                'id' => $job->getId(),
+                'name' => $job->getName(),
+                'description' => $job->getDescription(),
+                'active' => $job->getActive(),
+                'priortiy' => $job->getPriority(),
+                'createdAt' => $job->getCreatedAt(),
+                'company' => [
+                    'id' => $job->getCompany()->getId(),
+                    'company' => $job->getCompany()->getName()
+                    
+                ]
+            ];
         }
 
         return new JsonResponse(
             [
                 'results' => [
-                    'jobs' => [
-                        'name' => $name,
-                    ],
                     'error' => false,
+                    'jobs' => $name
                 ]
             ]
         );
@@ -231,26 +241,44 @@ class JobsController extends AbstractController
         }
     }
 
+       
     /**
-     * getjobName
+     * getJobByName
      *
      * @param  mixed $name
      * @return Response
      */
-    public function getjobName(string $name): Response
+    public function getJobByName(string $name): Response
     {
         try {
-            $result = $this->jobsRepository->getJobName($name);
+            $result = $this->jobsRepository->getJobByName($name);
+
+            $arr = [];
+            foreach ($result as $job) {
+                $arr[] = [
+                    'id' => $job->getId(),
+                    'name' => $job->getName(),
+                    'description' => $job->getDescription(),
+                    'active' => $job->getActive(),
+                    'priortiy' => $job->getPriority(),
+                    'createdAt' => $job->getCreatedAt(),
+                    'company' => [
+                        'id' => $job->getCompany()->getId(),
+                        'company' => $job->getCompany()->getName()
+                        
+                    ]
+                ];
+            }
 
             return new JsonResponse(
                 [
-                    'results' => [
-                        'jobs' => $result,
-                        'error' => false,
-                    ]
+                'results' => [
+                    'error' =>false,
+                    'jobs' => $arr
+                ]
                 ]
             );
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return new JsonResponse(
                 [
                     'results' => [
@@ -274,15 +302,32 @@ class JobsController extends AbstractController
         try {
             $result = $this->jobsRepository->getLikeJobName($name);
 
+            $arr = [];
+            foreach ($result as $job) {
+                $arr[] = [
+                    'id' => $job->getId(),
+                    'name' => $job->getName(),
+                    'description' => $job->getDescription(),
+                    'active' => $job->getActive(),
+                    'priortiy' => $job->getPriority(),
+                    'createdAt' => $job->getCreatedAt(),
+                    'company' => [
+                        'id' => $job->getCompany()->getId(),
+                        'company' => $job->getCompany()->getName()
+                        
+                    ]
+                ];
+            }
+            
             return new JsonResponse(
                 [
-                    'results' => [
-                        'job' => $result,
-                        'error' => false,
-                    ]
+                'results' => [
+                    'error' =>false,
+                    'jobs' => $arr
+                ]
                 ]
             );
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return new JsonResponse(
                 [
                     'results' => [
