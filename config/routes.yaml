@@ -12,7 +12,7 @@ app_company_list:
     controller: App\Controller\CompanyController::listCompany
     methods: GET
 
-ass_company_update:
+app_company_update:
     path: /company/update/{id}
     controller: App\Controller\CompanyController::updateCompany
     methods: PUT
@@ -37,5 +37,37 @@ app_company_like_companyName:
     controller: App\Controller\CompanyController::likeCompanyName
     methods: GET
 
+app_jobs_id:
+    path: /jobs/{id}
+    controller: App\Controller\JobsController::getJobById
+    methods: GET
 
+app_jobs_add:
+    path: /jobs/add
+    controller: App\Controller\JobsController::addJob
+    methods: POST
     
+app_jobs_list:
+    path: /jobs/list
+    controller: App\Controller\JobsController::getJobList
+    methods: GET
+
+app_jobs_update:
+    path: /jobs/update/{id}
+    controller: App\Controller\JobsController::updateJob
+    methods: PUT
+
+app_jobs_delete:
+    path: /jobs/delete/{id}
+    controller: App\Controller\JobsController::deleteJob
+    methods: DELETE
+
+app_jobs_jobName:
+    path: /jobs/name/{name}
+    controller: App\Controller\JobsController::getJobByName
+    methods: GET
+
+app_jobs_like_jobName:
+    path: /jobs/like/{name}
+    controller: App\Controller\JobsController::getLikeJobName
+    methods: GET
