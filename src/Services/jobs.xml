@@ -2,9 +2,9 @@
 <jobs>
     <job>
         <name>name1</name>
-        <description>description1</description>
-        <active>2</active>
-        <priority>2</priority>
+        <description>description 1</description>
+        <active>0</active>
+        <priority>0</priority>
         <company>company1</company>
     </job>
     <job>
@@ -18,16 +18,16 @@
     <job>
         <name>name3</name>
         <description>description3</description>
-        <active>2</active>
-        <priority>6</priority>
+        <active>0</active>
+        <priority>0</priority>
         <company>company3</company>
 
     </job>
     <job>
         <name>name4</name>
         <description>description44</description>
-        <active>3</active>
-        <priority>6</priority>
+        <active>1</active>
+        <priority>1</priority>
         <company>company4</company>
 
     </job>
@@ -35,7 +35,7 @@
         <name>name5</name>
         <description>description5</description>
         <active>1</active>
-        <priority>6</priority>
+        <priority>0</priority>
         <company>company5</company>
     </job>
 </jobs>

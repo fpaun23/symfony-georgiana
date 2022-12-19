@@ -9,8 +9,6 @@ use Exception;
 use App\Entity\Jobs;
 use App\Repository\JobsRepository;
 use App\Repository\CompanyRepository;
-use DOMDocument;
-use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
