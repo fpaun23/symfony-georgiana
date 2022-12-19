@@ -37,10 +37,10 @@ app_company_like_companyName:
     controller: App\Controller\CompanyController::likeCompanyName
     methods: GET
 
-app_jobs_id:
-    path: /jobs/{id}
-    controller: App\Controller\JobsController::getJobById
-    methods: GET
+# app_jobs_id:
+#     path: /jobs/{id}
+#     controller: App\Controller\JobsController::getJobById
+#     methods: GET
 
 app_jobs_add:
     path: /jobs/add
@@ -70,4 +70,9 @@ app_jobs_jobName:
 app_jobs_like_jobName:
     path: /jobs/like/{name}
     controller: App\Controller\JobsController::getLikeJobName
+    methods: GET
+
+app_jobs_xmlFile:
+    path: /jobs/bulk
+    controller: App\Controller\JobsController::bulk
     methods: GET

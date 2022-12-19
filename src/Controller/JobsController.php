@@ -9,10 +9,13 @@ use Exception;
 use App\Entity\Jobs;
 use App\Repository\JobsRepository;
 use App\Repository\CompanyRepository;
+use DOMDocument;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Services\FileReaderInterface;
 
 /**
  * JobsController
@@ -21,20 +24,23 @@ class JobsController extends AbstractController
 {
     private JobsRepository $jobsRepository;
     private CompanyRepository $companyRepository;
-    
+    private FileReaderInterface $fileReader;
+
     /**
      * __construct
      *
-     * @param  mixed $jobsRepository
-     * @param  mixed $companyRepository
      * @return void
      */
-    public function __construct(JobsRepository $jobsRepository, CompanyRepository $companyRepository)
-    {
+    public function __construct(
+        JobsRepository $jobsRepository,
+        CompanyRepository $companyRepository,
+        FileReaderInterface $fileReader
+    ) {
         $this->jobsRepository = $jobsRepository;
         $this->companyRepository = $companyRepository;
+        $this->fileReader = $fileReader;
     }
-        
+
     /**
      * addJob
      *
@@ -190,7 +196,7 @@ class JobsController extends AbstractController
                 'company' => [
                     'id' => $job->getCompany()->getId(),
                     'company' => $job->getCompany()->getName()
-                    
+
                 ]
             ];
         }
@@ -241,7 +247,7 @@ class JobsController extends AbstractController
         }
     }
 
-       
+
     /**
      * getJobByName
      *
@@ -265,17 +271,17 @@ class JobsController extends AbstractController
                     'company' => [
                         'id' => $job->getCompany()->getId(),
                         'company' => $job->getCompany()->getName()
-                        
+
                     ]
                 ];
             }
 
             return new JsonResponse(
                 [
-                'results' => [
-                    'error' =>false,
-                    'jobs' => $arr
-                ]
+                    'results' => [
+                        'error' => false,
+                        'jobs' => $arr
+                    ]
                 ]
             );
         } catch (\Exception $e) {
@@ -314,17 +320,42 @@ class JobsController extends AbstractController
                     'company' => [
                         'id' => $job->getCompany()->getId(),
                         'company' => $job->getCompany()->getName()
-                        
+
                     ]
                 ];
             }
-            
+
             return new JsonResponse(
                 [
-                'results' => [
-                    'error' =>false,
-                    'jobs' => $arr
+                    'results' => [
+                        'error' => false,
+                        'jobs' => $arr
+                    ]
                 ]
+            );
+        } catch (\Exception $e) {
+            return new JsonResponse(
+                [
+                    'results' => [
+                        'error' => true,
+                        'message' => $e->getMessage()
+                    ]
+                ]
+            );
+        }
+    }
+
+    public function bulk(): Response
+    {
+        try {
+            $arr[] = $this->fileReader->getData();
+
+            return new JsonResponse(
+                [
+                    'results' => [
+                        'error' => false,
+                        'jobs' => $arr
+                    ]
                 ]
             );
         } catch (\Exception $e) {

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jobs>
+    <job>
+        <name>name1</name>
+        <description>description1</description>
+        <active>2</active>
+        <priority>2</priority>
+        <company>company1</company>
+    </job>
+    <job>
+        <name>name2</name>
+        <description>description2</description>
+        <active>1</active>
+        <priority>1</priority>
+        <company>company2</company>
+
+    </job>
+    <job>
+        <name>name3</name>
+        <description>description3</description>
+        <active>2</active>
+        <priority>6</priority>
+        <company>company3</company>
+
+    </job>
+    <job>
+        <name>name4</name>
+        <description>description44</description>
+        <active>3</active>
+        <priority>6</priority>
+        <company>company4</company>
+
+    </job>
+    <job>
+        <name>name5</name>
+        <description>description5</description>
+        <active>1</active>
+        <priority>6</priority>
+        <company>company5</company>
+    </job>
+</jobs>
