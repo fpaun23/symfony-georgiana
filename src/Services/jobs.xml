@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jobs>
     <job>
-        <name>name1</name>
         <description>description 1</description>
         <active>0</active>
         <priority>0</priority>
         <company>company1</company>
     </job>
     <job>
-        <name>name2</name>
+        <names>name2</names>
         <description>description2</description>
         <active>1</active>
         <priority>1</priority>
@@ -33,7 +32,7 @@
     </job>
     <job>
         <name>name5</name>
-        <description>description5</description>
+        <description>description51232</description>
         <active>1</active>
         <priority>0</priority>
         <company>company5</company>

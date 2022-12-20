@@ -6,24 +6,18 @@ namespace App\Validator;
 
 class JobBulkValidator
 {
-    public const MANDATORY_JOB_ARRAY_KEYS = ['name', 'description', 'priority', 'active', 'company_id'];
-    
+    public const MANDATORY_JOB_ARRAY_KEYS = ['name', 'description', 'priority', 'active', 'company'];
+        
     /**
      * isValid
      *
-     * @param  mixed $jobs
+     * @param  mixed $keys
      * @return bool
      */
-    public function isValid(array $jobs): bool
+    public function isValid(array $keys): bool
     {
-        if (empty($jobs)) {
+        if (!empty(array_diff(self::MANDATORY_JOB_ARRAY_KEYS, $keys))) {
             return false;
-        }
-
-        foreach (self::MANDATORY_JOB_ARRAY_KEYS as $key) {
-            if (!array_key_exists($key, $jobs)) {
-                return false;
-            }
         }
         return true;
     }

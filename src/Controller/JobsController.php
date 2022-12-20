@@ -352,12 +352,6 @@ class JobsController extends AbstractController
     {
         try {
             $arr[] = $this->jobsService->fileReader->getData();
-            foreach ($arr as $data) {
-                $validator = $this->jobsService->jobBulkValidator->isValid($data);
-                if (!$validator) {
-                    continue;
-                }
-            }
 
             return new JsonResponse(
                 [
