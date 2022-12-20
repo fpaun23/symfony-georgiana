@@ -22,7 +22,7 @@ class JobBulkValidator
 
         foreach (self::MANDATORY_JOB_ARRAY_KEYS as $key) {
             if (!array_key_exists($key, $jobs)) {
-              var_dump($jobs);
+                return false;
             }
         }
         return true;
