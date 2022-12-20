@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Services\FileReaderInterface;
+use App\Services\JobsService;
 
 /**
  * JobsController
@@ -22,7 +22,7 @@ class JobsController extends AbstractController
 {
     private JobsRepository $jobsRepository;
     private CompanyRepository $companyRepository;
-    private FileReaderInterface $fileReader;
+    private JobsService $jobsService;
 
     /**
      * __construct
@@ -32,11 +32,11 @@ class JobsController extends AbstractController
     public function __construct(
         JobsRepository $jobsRepository,
         CompanyRepository $companyRepository,
-        FileReaderInterface $fileReader
+        JobsService $jobsService
     ) {
         $this->jobsRepository = $jobsRepository;
         $this->companyRepository = $companyRepository;
-        $this->fileReader = $fileReader;
+        $this->jobsService = $jobsService;
     }
 
     /**
@@ -342,27 +342,32 @@ class JobsController extends AbstractController
             );
         }
     }
-
+    
+    /**
+     * bulk
+     *
+     * @return Response
+     */
     public function bulk(): Response
     {
         try {
-            $arr[] = $this->fileReader->getData();
+            $arr[] = $this->jobsService->fileReader->getData();
+            foreach ($arr as $data) {
+                $validator = $this->jobsService->jobBulkValidator->isValid($data);
+                if (!$validator) {
+                    continue;
+                }
+            }
 
             return new JsonResponse(
                 [
-                    'results' => [
-                        'error' => false,
-                        'jobs' => $arr
-                    ]
+                    'jobs' => $arr
                 ]
             );
         } catch (\Exception $e) {
             return new JsonResponse(
                 [
-                    'results' => [
-                        'error' => true,
-                        'message' => $e->getMessage()
-                    ]
+                    'message' => $e->getMessage()
                 ]
             );
         }
