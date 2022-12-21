@@ -75,4 +75,4 @@ app_jobs_like_jobName:
 app_jobs_xmlFile:
     path: /jobs/bulk
     controller: App\Controller\JobsController::bulk
-    methods: GET
+    methods: POST

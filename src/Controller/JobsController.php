@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Services\JobsService;
+use App\Services\Jobs\JobsService;
 
 /**
  * JobsController
@@ -351,17 +351,20 @@ class JobsController extends AbstractController
     public function bulk(): Response
     {
         try {
-            $arr[] = $this->jobsService->fileReader->getData();
+            $data = $this->jobsService->saveJobs();
 
-            return new JsonResponse(
-                [
-                    'jobs' => $arr
-                ]
-            );
+            return new JsonResponse([
+                "total_jobs" => $data["total_jobs"],
+                "valid_jobs" => $data["valid_jobs"],
+                "invalid_jobs" => $data["invalid_jobs"]
+            ]);
         } catch (\Exception $e) {
             return new JsonResponse(
                 [
-                    'message' => $e->getMessage()
+                    'results' => [
+                        'error' => true,
+                        'message' => $e->getMessage()
+                    ]
                 ]
             );
         }

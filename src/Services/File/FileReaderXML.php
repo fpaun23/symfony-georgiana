@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Services\File;
 
 use DOMDocument;
-use App\Services\FileReaderInterface;
-use App\Validator\JobBulkValidator;
+use App\Services\File\FileReaderInterface;
+use App\Validator\Job\JobBulkValidator;
 
 class FileReaderXML implements FileReaderInterface
 {
@@ -56,11 +56,11 @@ class FileReaderXML implements FileReaderInterface
             foreach ($job->getElementsByTagName('*') as $tag) {
                 $tags[] = $tag->tagName;
                 if ($this->validator->isValid($tags)) {
-                    $arr[] = [
+                    $arr["jobs"][] = [
                         'name' => $job->getElementsByTagName('name')->item(0)->nodeValue,
                         'description' => $job->getElementsByTagName('description')->item(0)->nodeValue,
                         'active' => $job->getElementsByTagName('active')->item(0)->nodeValue,
-                        'priortiy' => $job->getElementsByTagName('priority')->item(0)->nodeValue,
+                        'priority' => $job->getElementsByTagName('priority')->item(0)->nodeValue,
                         'company_id' =>$job->getElementsByTagName('company')->item(0)->nodeValue
                     ];
                 }

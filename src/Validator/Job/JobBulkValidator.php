@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Validator;
+namespace App\Validator\Job;
+
+use App\Entity\Company;
 
 class JobBulkValidator
 {
@@ -20,5 +22,10 @@ class JobBulkValidator
             return false;
         }
         return true;
+    }
+
+    public function companyIsValid(?Company $company): bool
+    {
+        return ($company !== null);
     }
 }
