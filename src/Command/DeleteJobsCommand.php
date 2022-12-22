@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class DeleteJobsCommand extends Command
 {
-    protected static $defaultName = 'app:delete-jobs';
+    protected static $defaultName = 'app:deleteJobs';
 
     private JobsRepository $jobsRepository;
 

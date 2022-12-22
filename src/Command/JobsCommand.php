@@ -10,21 +10,39 @@ use Symfony\Component\Console\Output\OutputInterface;
 class JobsCommand extends Command
 {
     private JobsService $jobsService;
-
+    
+    /**
+     * __construct
+     *
+     * @param  mixed $jobsService
+     * @return void
+     */
     public function __construct(JobsService $jobsService)
     {
         $this->jobsService = $jobsService;
 
         parent::__construct();
     }
-
+    
+    /**
+     * configure
+     *
+     * @return void
+     */
     protected function configure()
     {
         $this
             ->setName('jobs:stats')
             ->setDescription('Retrieve statistics about jobs');
     }
-
+    
+    /**
+     * execute
+     *
+     * @param  mixed $input
+     * @param  mixed $output
+     * @return void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $jobs = $this->jobsService->saveJobs();
