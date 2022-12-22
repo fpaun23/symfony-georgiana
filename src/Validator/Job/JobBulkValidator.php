@@ -19,7 +19,6 @@ class JobBulkValidator
     public function isValid(array $job): bool
     {
         foreach (self::MANDATORY_JOB_ARRAY_KEYS as $key) {
-
             if (!in_array($key, $job)) {
                 return false;
             }
