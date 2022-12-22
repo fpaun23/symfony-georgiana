@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Services\Jobs\JobsService;
 
 /**
  * JobsController
@@ -21,20 +22,23 @@ class JobsController extends AbstractController
 {
     private JobsRepository $jobsRepository;
     private CompanyRepository $companyRepository;
-    
+    private JobsService $jobsService;
+
     /**
      * __construct
      *
-     * @param  mixed $jobsRepository
-     * @param  mixed $companyRepository
      * @return void
      */
-    public function __construct(JobsRepository $jobsRepository, CompanyRepository $companyRepository)
-    {
+    public function __construct(
+        JobsRepository $jobsRepository,
+        CompanyRepository $companyRepository,
+        JobsService $jobsService
+    ) {
         $this->jobsRepository = $jobsRepository;
         $this->companyRepository = $companyRepository;
+        $this->jobsService = $jobsService;
     }
-        
+
     /**
      * addJob
      *
@@ -190,7 +194,7 @@ class JobsController extends AbstractController
                 'company' => [
                     'id' => $job->getCompany()->getId(),
                     'company' => $job->getCompany()->getName()
-                    
+
                 ]
             ];
         }
@@ -241,7 +245,7 @@ class JobsController extends AbstractController
         }
     }
 
-       
+
     /**
      * getJobByName
      *
@@ -265,17 +269,17 @@ class JobsController extends AbstractController
                     'company' => [
                         'id' => $job->getCompany()->getId(),
                         'company' => $job->getCompany()->getName()
-                        
+
                     ]
                 ];
             }
 
             return new JsonResponse(
                 [
-                'results' => [
-                    'error' =>false,
-                    'jobs' => $arr
-                ]
+                    'results' => [
+                        'error' => false,
+                        'jobs' => $arr
+                    ]
                 ]
             );
         } catch (\Exception $e) {
@@ -314,19 +318,42 @@ class JobsController extends AbstractController
                     'company' => [
                         'id' => $job->getCompany()->getId(),
                         'company' => $job->getCompany()->getName()
-                        
+
                     ]
                 ];
             }
-            
+
             return new JsonResponse(
                 [
-                'results' => [
-                    'error' =>false,
-                    'jobs' => $arr
-                ]
+                    'results' => [
+                        'error' => false,
+                        'jobs' => $arr
+                    ]
                 ]
             );
+        } catch (\Exception $e) {
+            return new JsonResponse(
+                [
+                    'results' => [
+                        'error' => true,
+                        'message' => $e->getMessage()
+                    ]
+                ]
+            );
+        }
+    }
+    
+    /**
+     * bulk
+     *
+     * @return Response
+     */
+    public function bulk(): Response
+    {
+        try {
+            $data = $this->jobsService->saveJobs();
+
+            return new JsonResponse($data);
         } catch (\Exception $e) {
             return new JsonResponse(
                 [
