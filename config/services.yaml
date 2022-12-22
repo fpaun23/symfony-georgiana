@@ -32,4 +32,8 @@ services:
 
     App\Command\JobsCommand:
         tags:
-        - { name: 'console.command', command: 'jobs:stats'}
+        - { name: 'console.command', class: 'Symfony\Component\Console\Command\Command'}
+
+    App\Command\DeleteJobsCommand:
+        tags:
+        - { name: 'console.command', class: 'Symfony\Component\Console\Command\Command'}
