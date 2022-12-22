@@ -13,7 +13,8 @@ class FileReaderXML implements FileReaderInterface
     const FILE_NAME = 'jobs.xml';
     const FILE_PATH = __DIR__ . '/' . self::FILE_NAME;
     public JobBulkValidator $validator;
-    
+    private $data;
+
     /**
      * __construct
      *
@@ -44,28 +45,10 @@ class FileReaderXML implements FileReaderInterface
         if (false == $lines) {
             throw new \Exception('Error reading file content.');
         }
-        $dom = new DOMDocument();
-        $dom->load(self::FILE_PATH);
-        $arr = [];
-
-        $jobs = $dom->getElementsByTagName('job');
-
-        foreach ($jobs as $job) {
-            $tags = array();
-
-            foreach ($job->getElementsByTagName('*') as $tag) {
-                $tags[] = $tag->tagName;
-                if ($this->validator->isValid($tags)) {
-                    $arr["jobs"][] = [
-                        'name' => $job->getElementsByTagName('name')->item(0)->nodeValue,
-                        'description' => $job->getElementsByTagName('description')->item(0)->nodeValue,
-                        'active' => $job->getElementsByTagName('active')->item(0)->nodeValue,
-                        'priority' => $job->getElementsByTagName('priority')->item(0)->nodeValue,
-                        'company_id' =>$job->getElementsByTagName('company')->item(0)->nodeValue
-                    ];
-                }
-            }
-        }
+        $xml = simplexml_load_file(self::FILE_PATH);
+        $json = json_encode($xml);
+        $this->data = json_decode($json, true);
+        $arr = ["jobs" => $this->data['job']];
         return $arr;
     }
 }

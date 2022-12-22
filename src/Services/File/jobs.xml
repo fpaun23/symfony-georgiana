@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jobs>
     <job>
+        <names>name2</names>
         <description>description 1</description>
         <active>0</active>
         <priority>0</priority>
-        <company>28</company>
+        <company_id>28</company_id>
     </job>
     <job>
         <name>name2</name>
         <description>description2</description>
         <active>1</active>
         <priority>1</priority>
-        <company>40</company>
 
     </job>
     <job>
@@ -19,7 +19,7 @@
         <description>description3</description>
         <active>0</active>
         <priority>0</priority>
-        <company>28</company>
+        <company_id>28</company_id>
 
     </job>
 </jobs>

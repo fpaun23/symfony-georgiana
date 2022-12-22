@@ -51,35 +51,48 @@ class JobsService implements JobsServiceInterface
      */
     public function saveJobs(): array
     {
-        $data = $this->fileReader->getData()['jobs'];
-        $this->totalJobs = sizeof($data);
+        $jobs = $this->fileReader->getData();
+        $this->totalJobs = sizeof($jobs["jobs"]);
 
-        foreach ($data as $dataJob) {
-            $company = $this->companyRepository->find($dataJob['company_id']);
-
-            if (!$this->jobBulkValidator->companyIsValid($company)) {
-                $this->invalidJobs++;
-
-                $this->logger->error(
-                    "Error",
-                    [
-                        json_encode("Company with id " . $dataJob['company_id'] . " does not exist")
-                    ]
-                );
-            } else {
-
-                $this->validJobs++;
-
-                $job = new Jobs();
-
-                $job->setName($dataJob['name']);
-                $job->setDescription($dataJob['description']);
-                $job->setPriority((int)$dataJob['priority']);
-                $job->setActive((int)$dataJob['active']);
-                $job->setCompany($company);
-                $job->setCreatedAt(new \DateTime("now"));
-
-                $this->jobsRepository->save($job);
+        foreach ($jobs as $job) {
+            foreach ($job as $dataJob) {
+                $vars = array_keys($dataJob);
+                if ($this->jobBulkValidator->isValid($vars)) {
+                    $company = $this->companyRepository->find($dataJob['company_id']);
+                    if (!$this->jobBulkValidator->companyIsValid($company)) {
+                        $this->invalidJobs++;
+    
+                        $this->logger->error(
+                            "Error",
+                            [
+                                json_encode("Company with id " . $dataJob['company_id'] . " does not exist")
+                            ]
+                        );
+                    } else {
+    
+                        $this->validJobs++;
+    
+                        $job = new Jobs();
+    
+                        $job->setName($dataJob['name']);
+                        $job->setDescription($dataJob['description']);
+                        $job->setPriority((int)$dataJob['priority']);
+                        $job->setActive((int)$dataJob['active']);
+                        $job->setCompany($company);
+                        $job->setCreatedAt(new \DateTime("now"));
+    
+                        $this->jobsRepository->save($job);
+                    }
+                } else {
+                    $this->invalidJobs++;
+    
+                    $this->logger->error(
+                        "Error",
+                        [
+                            json_encode('Invalid jobs in the file')
+                        ]
+                    );
+                }
             }
         }
 

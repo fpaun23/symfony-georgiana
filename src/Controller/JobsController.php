@@ -353,11 +353,7 @@ class JobsController extends AbstractController
         try {
             $data = $this->jobsService->saveJobs();
 
-            return new JsonResponse([
-                "total_jobs" => $data["total_jobs"],
-                "valid_jobs" => $data["valid_jobs"],
-                "invalid_jobs" => $data["invalid_jobs"]
-            ]);
+            return new JsonResponse($data);
         } catch (\Exception $e) {
             return new JsonResponse(
                 [

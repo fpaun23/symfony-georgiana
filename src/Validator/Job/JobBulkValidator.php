@@ -8,19 +8,23 @@ use App\Entity\Company;
 
 class JobBulkValidator
 {
-    public const MANDATORY_JOB_ARRAY_KEYS = ['name', 'description', 'priority', 'active', 'company'];
-        
+    public const MANDATORY_JOB_ARRAY_KEYS = ['name', 'description', 'priority', 'active', 'company_id'];
+
     /**
      * isValid
      *
      * @param  mixed $keys
      * @return bool
      */
-    public function isValid(array $keys): bool
+    public function isValid(array $job): bool
     {
-        if (!empty(array_diff(self::MANDATORY_JOB_ARRAY_KEYS, $keys))) {
-            return false;
+        foreach (self::MANDATORY_JOB_ARRAY_KEYS as $key) {
+
+            if (!in_array($key, $job)) {
+                return false;
+            }
         }
+
         return true;
     }
 
