@@ -29,3 +29,7 @@ services:
         class: App\Services\Jobs\JobsService
         arguments:
             - '@App\Services\File\FileReaderXML'
+
+    App\Command\JobsCommand:
+        tags:
+        - { name: 'console.command', command: 'jobs:stats'}
