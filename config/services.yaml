@@ -29,3 +29,11 @@ services:
         class: App\Services\Jobs\JobsService
         arguments:
             - '@App\Services\File\FileReaderXML'
+
+    App\Command\JobsCommand:
+        tags:
+        - { name: 'console.command', class: 'Symfony\Component\Console\Command\Command'}
+
+    App\Command\DeleteJobsCommand:
+        tags:
+        - { name: 'console.command', class: 'Symfony\Component\Console\Command\Command'}
